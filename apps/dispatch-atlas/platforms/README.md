@@ -2,6 +2,8 @@
 
 These projects wrap the shared web edition on iOS, macOS, Android, and desktop, and provide a separate native station/dispatch display on tvOS. The source projects are accompanied by GitHub Actions build outputs. The iOS and tvOS **simulator apps**, native unsigned macOS app, Android debug APK, unsigned Electron macOS DMG, and unsigned Windows portable EXE compiled/packaged successfully in run 44635479873 on 2026-11-19. Physical-device behavior, native background audio, signing/notarization, and store distribution have not been tested. Simulator apps are not installable on physical iPhones or Apple TVs.
 
+The supplementary [universal Mac run 44636797892](https://github.com/CRYPTOJEFFE/JeffeRescueMap-AI/actions/runs/44636797892), commit `98590e7295b7071e2823fd9630d5ebf715d1464c`, also passed native Release and Electron DMG builds. `lipo` checks verified **both Intel `x86_64` and Apple Silicon `arm64`** in each app executable, and artifact uploads succeeded. Use these newer universal Mac artifacts instead of the original Apple Silicon-only Mac outputs. They remain unsigned and have not been launched on a physical Mac.
+
 ## Package the shared web application
 
 Run from the project root after building the web edition:
@@ -142,6 +144,7 @@ Do not use unrestricted CORS as a substitute for authorization. Production endpo
 - `python3 -m py_compile platforms/copy-assets.py`: passed.
 - Apple project YAML and Android XML are parsed as structural validation.
 - GitHub Actions run [44635479873](https://github.com/CRYPTOJEFFE/JeffeRescueMap-AI/actions/runs/44635479873), source commit `4d2868fc5c5c55aec07b7c787df94d663c52829b`: iOS simulator app, tvOS simulator app, native unsigned macOS app, Android debug APK, and Electron macOS DMG **build/packaging passed**.
+- Supplementary [Mac universal run 44636797892](https://github.com/CRYPTOJEFFE/JeffeRescueMap-AI/actions/runs/44636797892), commit `98590e7295b7071e2823fd9630d5ebf715d1464c`: native Release app, Electron universal DMG, `arm64`/`x86_64` verification with `lipo`, and uploads **passed**.
 - Electron Windows portable EXE packaging and artifact upload: **passed** in the same run.
 - Shared web tests: 39 Node tests and 11 Chromium acceptance tests passed, as recorded by the main project validation.
 - Build success is not a native runtime test. No physical iPhone, Apple TV, Android, Windows, or Mac device was exercised. No simulator interaction tests were run. No hardware-signed iOS/tvOS IPA, release-signed Android APK, notarized Mac app, or signed Windows release is included.

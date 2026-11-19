@@ -37,7 +37,7 @@ Status recorded 2026-11-19. This document distinguishes implemented source, exec
 | Browser | Online/offline single HTML and folder builds; 11 real Chromium flows passed in CI | Authenticated deployed-preview rendering and full physical-device/browser coverage. |
 | iOS/iPadOS 17+ | WKWebView project; iOS Simulator build passed | Simulator runtime, device installation, distribution signing, background playback, lock-screen integration, push, and device export behavior. |
 | tvOS 17+ | Native SwiftUI station/dispatch; tvOS Simulator build passed | Simulator/TV runtime, remote behavior, device signing/install, reliable background delivery, offline imagery, station hardware. |
-| macOS 14+ | Unsigned native WKWebView app and unsigned Electron DMG built successfully | Installation/runtime, physical OS tests, signing/notarization. |
+| macOS 14+ | Unsigned universal native WKWebView app and Electron DMG; both contain Intel `x86_64` and Apple Silicon `arm64` | Installation/runtime, physical OS tests, signing/notarization. |
 | Windows | Sandboxed Electron project; unsigned portable executable packaging and artifact upload passed | Release signing, executable launch, installation/runtime and native permissions. |
 | Android 8+ | Kotlin WebView/AndroidX asset loader; debug APK built successfully | Device install/runtime, release signing, background audio, native push, geolocation/Blob-download bridging; Android TV target absent. |
 
@@ -51,12 +51,14 @@ Native implementation details and rebuild commands are in [platforms/README.md](
 | Browser UI smoke suite | 11 real Chromium browser flows passed in GitHub CI. |
 | Android | Debug APK compilation/package passed in CI. |
 | Apple native targets | iOS Simulator, tvOS Simulator, and unsigned native macOS builds passed in CI. |
-| Electron macOS | Unsigned DMG packaging passed in CI. |
+| Electron macOS | Unsigned DMG packaging passed in the original CI run; supplementary universal build and both-architecture checks also passed. |
 | Electron Windows | Unsigned portable executable packaging and artifact upload passed in CI. |
 | Screenshots | Reviewed `desktop-incidents.png`, `desktop-station.png`, and `mobile-categories.png` from CI artifact `14584830394`; layouts fit their viewports. The mobile browser suite also asserted no horizontal overflow. |
 | Physical devices | No installation, app launch, or native-runtime test completed. |
 
 Evidence: [GitHub Actions run 44635479873](https://github.com/CRYPTOJEFFE/JeffeRescueMap-AI/actions/runs/44635479873), source head `4d2868fc5c5c55aec07b7c787df94d663c52829b`; all jobs completed successfully. The earlier local Chromium attempt was blocked by the workspace socket policy. That local limitation is separate from the successful real-browser execution in GitHub CI.
+
+Supplementary Mac evidence: [run 44636797892](https://github.com/CRYPTOJEFFE/JeffeRescueMap-AI/actions/runs/44636797892), source head `98590e7295b7071e2823fd9630d5ebf715d1464c`, passed native Release compilation, Electron universal DMG packaging, `lipo` checks for both `arm64` and `x86_64`, and artifact upload. This extends Mac architecture coverage to Intel and Apple Silicon; it is not a physical Mac runtime test. The original 39 Node / 11 Chromium and other-platform results remain attributed to run 44635479873.
 
 Tests do not establish provider availability, accuracy of third-party incident reports, or notification delivery reliability. Training fixtures are labeled throughout and are not evidence of real incidents.
 
@@ -68,7 +70,7 @@ The [private web edition](https://dispatch-atlas-jeffe.jeffjoseph1129.chatgpt.si
 
 ## Download and install the CI artifacts
 
-Open the [verified build run](https://github.com/CRYPTOJEFFE/JeffeRescueMap-AI/actions/runs/44635479873) while signed in to GitHub and download its available artifacts. Extract the Android artifact to get the debug APK for a test device; extract the macOS artifact to get the unsigned DMG. Physical-device installation remains a next step. iOS/tvOS outputs are simulator builds, not signed device-installable IPA files; build/sign device targets with Xcode. For Windows, extract the portable artifact and run its unsigned executable on a test computer; physical runtime remains untested.
+Open the [verified build run](https://github.com/CRYPTOJEFFE/JeffeRescueMap-AI/actions/runs/44635479873) while signed in to GitHub and download its available artifacts. Extract the Android artifact to get the debug APK for a test device; download the Mac artifacts from the [supplementary universal run](https://github.com/CRYPTOJEFFE/JeffeRescueMap-AI/actions/runs/44636797892) to get the unsigned universal DMG and native app for Intel or Apple Silicon. The original run's Mac packages were Apple Silicon only. Physical-device installation remains a next step. iOS/tvOS outputs are simulator builds, not signed device-installable IPA files; build/sign device targets with Xcode. For Windows, extract the portable artifact and run its unsigned executable on a test computer; physical runtime remains untested.
 
 Artifacts expire **December 3, 2026**. Rerun the repository's build workflow to regenerate them; source and build instructions remain in the repository. Do not treat an unsigned/test package as an App Store or production-signed release.
 
