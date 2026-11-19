@@ -1,0 +1,144 @@
+{
+  "review_date": "2026-11-19",
+  "analysis_type": "user-supplied visual evidence; independent behavioral reconstruction",
+  "source_files": [
+    {
+      "file": "115D9C69-C953-4C60-A362-8665FE5F4C50.png",
+      "bytes": 113476,
+      "sha256": "2eed41bcc35bd318e1681b68041f3fc4a018be3a9bc117380ea2480066ebe646",
+      "dimensions": {
+        "width": 450,
+        "height": 450
+      }
+    },
+    {
+      "file": "IMG_2916.jpeg",
+      "bytes": 210852,
+      "sha256": "34fe00525220ad3a7e49fa5f823e0eda422c5189360c7f00a60806ebbad9c333",
+      "dimensions": {
+        "width": 710,
+        "height": 1536
+      }
+    },
+    {
+      "file": "IMG_2917.jpeg",
+      "bytes": 148500,
+      "sha256": "4a7addfa8a3b2f2646e1631bf42fb9d6792245ea438396016e76b3143b4c60e1",
+      "dimensions": {
+        "width": 710,
+        "height": 1536
+      }
+    },
+    {
+      "file": "IMG_2922.png",
+      "bytes": 942207,
+      "sha256": "ddd431252fbf048685f7f1eb3083fe78f57ae5efa5ef10ee790e37b8cf58c954",
+      "dimensions": {
+        "width": 1284,
+        "height": 2778
+      }
+    },
+    {
+      "file": "IMG_2923.png",
+      "bytes": 300705,
+      "sha256": "d24024205570c6f689bda9792a46704bd95ff1c760aadb4e66d609a63315ae79",
+      "dimensions": {
+        "width": 1284,
+        "height": 2778
+      }
+    },
+    {
+      "file": "IMG_2924.png",
+      "bytes": 346830,
+      "sha256": "885d27be862df409a7622990a142fe77328fc2265366b8785541ff24696ce6a1",
+      "dimensions": {
+        "width": 1284,
+        "height": 2778
+      }
+    },
+    {
+      "file": "IMG_2925.png",
+      "bytes": 322237,
+      "sha256": "234fa11fd07071cb722991ad2573456355cd033431ea94a9ea4347d4ac22a3e9",
+      "dimensions": {
+        "width": 1284,
+        "height": 2778
+      }
+    },
+    {
+      "file": "IMG_2926.png",
+      "bytes": 335427,
+      "sha256": "001937e329094fb0f23cf2523aab8b17e2159fa0527287e27b66123dc5c7f3af",
+      "dimensions": {
+        "width": 1284,
+        "height": 2778
+      }
+    },
+    {
+      "file": "IMG_2927.png",
+      "bytes": 327789,
+      "sha256": "c150400d7d4f5dd66240b63a2e435bada4d364bc3e03f41fc8b690cbe202166e",
+      "dimensions": {
+        "width": 1284,
+        "height": 2778
+      }
+    },
+    {
+      "file": "ScreenRecording_11-19-2026 07-53-45_1(1).mp4",
+      "bytes": 6629054,
+      "sha256": "78a8beab6c120a36d12d4e246d8dc36132483f0e2a093e44a64227ddac540da2"
+    }
+  ],
+  "video": {
+    "duration_seconds": 21.833333,
+    "width": 512,
+    "height": 1106,
+    "fps": 30,
+    "has_audio": true,
+    "visual_review": "contact sheet sampled at one frame per three seconds; seven visible frames",
+    "full_frame_by_frame_review": false,
+    "audio_reviewed": false,
+    "observed": [
+      "FDNY Calls player",
+      "scanner metadata",
+      "moving transcript ticker",
+      "Stop/Hold/Ignore controls",
+      "Previous/Next call",
+      "Groups",
+      "Standard/Smart/Latest modes",
+      "recent calls"
+    ],
+    "unobserved": [
+      "button activation effects",
+      "navigation",
+      "mode transitions",
+      "API traffic"
+    ]
+  },
+  "exact_sampled_colors": {
+    "canvas": "#050e26",
+    "panel": "#0e1b33",
+    "player": "#182746",
+    "accent": "#e8b33c",
+    "text": "#ece7da",
+    "muted": "#8da0c6",
+    "border": "#33456b"
+  },
+  "source_urls": [
+    {
+      "url": "https://apps.apple.com/us/app/squawster-police-scanner/id6802709530",
+      "access_date": "2026-11-19",
+      "kind": "developer listing; claims not independent tests",
+      "observed_version": "1.0.13"
+    }
+  ],
+  "unavailable": [
+    "original source code",
+    "native binary",
+    "private API contracts",
+    "AI models",
+    "provider credentials",
+    "subscription service implementation"
+  ],
+  "source_assets_reused_in_app": false
+}

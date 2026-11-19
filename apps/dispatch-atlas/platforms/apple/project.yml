@@ -1,0 +1,81 @@
+name: DispatchAtlas
+options:
+  bundleIdPrefix: com.jeffe.dispatchatlas
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    VERSIONING_SYSTEM: apple-generic
+    CURRENT_PROJECT_VERSION: 1
+    MARKETING_VERSION: 0.1.0
+    CODE_SIGN_STYLE: Automatic
+targets:
+  DispatchAtlasIOS:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - Shared
+      - path: Resources/web
+        type: folder
+        buildPhase: resources
+    info:
+      path: Generated/iOS-Info.plist
+      properties:
+        CFBundleDisplayName: Dispatch Atlas
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
+        NSLocationWhenInUseUsageDescription: Show nearby feeds and incidents when you request your location.
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.jeffe.dispatchatlas.ios
+        TARGETED_DEVICE_FAMILY: "1,2"
+  DispatchAtlasMac:
+    type: application
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - Shared
+      - path: Resources/web
+        type: folder
+        buildPhase: resources
+    info:
+      path: Generated/macOS-Info.plist
+      properties:
+        CFBundleDisplayName: Dispatch Atlas
+        NSLocationWhenInUseUsageDescription: Show nearby feeds and incidents when you request your location.
+    entitlements:
+      path: Generated/macOS.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.network.client: true
+        com.apple.security.files.user-selected.read-only: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.jeffe.dispatchatlas.mac
+  DispatchAtlasTV:
+    type: application
+    platform: tvOS
+    deploymentTarget: "17.0"
+    sources:
+      - TV
+    info:
+      path: Generated/tvOS-Info.plist
+      properties:
+        CFBundleDisplayName: Dispatch Atlas Station
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.jeffe.dispatchatlas.tv
+schemes:
+  DispatchAtlasIOS:
+    build:
+      targets:
+        DispatchAtlasIOS: all
+  DispatchAtlasMac:
+    build:
+      targets:
+        DispatchAtlasMac: all
+  DispatchAtlasTV:
+    build:
+      targets:
+        DispatchAtlasTV: all

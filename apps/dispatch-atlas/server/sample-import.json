@@ -1,0 +1,29 @@
+{
+  "incidents": [
+    {
+      "id": "training-server-001",
+      "typeId": "structure-working",
+      "title": "TRAINING — Working fire exercise",
+      "category": "fire",
+      "emoji": "🔥",
+      "agency": "Training agency",
+      "area": "Fictional exercise area",
+      "address": "Training block A — fictional scenario",
+      "crossStreets": "Training lane / Exercise road",
+      "lat": null,
+      "lon": null,
+      "priority": "high",
+      "status": "training",
+      "reportedAt": "2026-11-19T20:00:00Z",
+      "units": ["Training Engine 1", "Training Ladder 1"],
+      "transcript": "Training exercise only. No actual emergency is being reported.",
+      "trigger": "training exercise",
+      "source": "Dispatch Atlas bundled fictional exercise",
+      "verification": "demo",
+      "demo": true,
+      "pois": []
+    }
+  ],
+  "feeds": [],
+  "calls": []
+}

@@ -1,0 +1,25 @@
+{
+  "name": "dispatch-atlas-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Dispatch Atlas desktop shell",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win portable",
+    "build:mac": "electron-builder --mac dmg",
+    "build:linux": "electron-builder --linux AppImage"
+  },
+  "devDependencies": {
+    "electron": "^39.0.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.jeffe.dispatchatlas.desktop",
+    "productName": "Dispatch Atlas",
+    "files": ["main.cjs", "web/**/*", "package.json"],
+    "directories": {"output": "release"},
+    "mac": {"category": "public.app-category.utilities"},
+    "win": {"target": "portable"}
+  }
+}

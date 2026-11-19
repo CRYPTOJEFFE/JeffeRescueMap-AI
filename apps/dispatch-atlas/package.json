@@ -1,0 +1,15 @@
+{
+  "name": "dispatch-atlas",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Independent scanner and incident workspace with offline and station displays",
+  "scripts": {
+    "start": "node server/server.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/core.test.cjs tests/app-state.test.cjs tests/server.test.mjs tests/map.test.cjs",
+    "test:ui": "node tests/ui-smoke.cjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
