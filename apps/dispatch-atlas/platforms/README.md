@@ -1,6 +1,6 @@
 # Dispatch Atlas native editions
 
-These projects wrap the shared web edition on iOS, macOS, Android, and desktop, and provide a separate native station/dispatch display on tvOS. They are **source projects**, not signed installers. Swift/Kotlin builds, signing, physical-device behavior, native background audio, and store distribution have not been verified in this Linux workspace.
+These projects wrap the shared web edition on iOS, macOS, Android, and desktop, and provide a separate native station/dispatch display on tvOS. The source projects are accompanied by GitHub Actions build outputs. The iOS and tvOS **simulator apps**, native unsigned macOS app, Android debug APK, unsigned Electron macOS DMG, and unsigned Windows portable EXE compiled/packaged successfully in run 44635479873 on 2026-11-19. Physical-device behavior, native background audio, signing/notarization, and store distribution have not been tested. Simulator apps are not installable on physical iPhones or Apple TVs.
 
 ## Package the shared web application
 
@@ -119,7 +119,7 @@ npm run build:mac
 npm run build:linux
 ```
 
-Outputs appear in `platforms/desktop/release`. Windows produces a portable executable, macOS a DMG, Linux an AppImage. Signing/notarization requires your own configuration and credentials; these commands have not been executed here.
+Outputs appear in `platforms/desktop/release`. Windows produces a portable executable, macOS a DMG, Linux an AppImage. Signing/notarization requires your own configuration and credentials. GitHub Actions successfully packaged the unsigned macOS DMG and Windows portable EXE; build details are recorded below.
 
 The Electron shell serves local assets using its `atlas://app` protocol, keeps Node integration disabled and the renderer sandboxed, uses context isolation, prevents embedded webviews, opens only HTTP(S) links externally, and denies permission requests by default. Local import works through normal HTML file controls. Geolocation and native notifications need deliberate permission UI before enabling them. The shell is not a remote content browser.
 
@@ -136,12 +136,16 @@ The web edition's gateway CORS configuration must explicitly allow the shell ori
 
 Do not use unrestricted CORS as a substitute for authorization. Production endpoints and native media should use HTTPS. The development server's `http://127.0.0.1:8787` address is local to each device and will not reach your Mac/NAS from a phone or TV. Put the gateway behind a trusted HTTPS hostname for network devices.
 
-## Verification performed here
+## Build validation
 
 - `node --check platforms/desktop/main.cjs`: passed.
 - `python3 -m py_compile platforms/copy-assets.py`: passed.
 - Apple project YAML and Android XML are parsed as structural validation.
-- No Swift compiler, Xcode SDKs, Android SDK, Gradle, or Electron dependencies were present, so no native compilation, simulator run, or installer generation is claimed.
+- GitHub Actions run [44635479873](https://github.com/CRYPTOJEFFE/JeffeRescueMap-AI/actions/runs/44635479873), source commit `4d2868fc5c5c55aec07b7c787df94d663c52829b`: iOS simulator app, tvOS simulator app, native unsigned macOS app, Android debug APK, and Electron macOS DMG **build/packaging passed**.
+- Electron Windows portable EXE packaging and artifact upload: **passed** in the same run.
+- Shared web tests: 39 Node tests and 11 Chromium acceptance tests passed, as recorded by the main project validation.
+- Build success is not a native runtime test. No physical iPhone, Apple TV, Android, Windows, or Mac device was exercised. No simulator interaction tests were run. No hardware-signed iOS/tvOS IPA, release-signed Android APK, notarized Mac app, or signed Windows release is included.
+- iOS/tvOS ZIP files contain simulator `.app` bundles for Xcode Simulator. They cannot be installed on physical devices. For hardware builds, open the source project on a Mac, select your signing team and target device, then compile for that device.
 
 Primary implementation references: [Apple MapKit for SwiftUI](https://developer.apple.com/documentation/mapkit/mapkit-for-swiftui), [Apple web views](https://developer.apple.com/design/human-interface-guidelines/web-views), [Android local web content](https://developer.android.com/develop/ui/views/layout/webapps/load-local-content), and [Electron security](https://www.electronjs.org/docs/latest/tutorial/security).
 
@@ -151,4 +155,4 @@ Primary implementation references: [Apple MapKit for SwiftUI](https://developer.
 
 The template compiles iOS/tvOS simulator apps and an unsigned native macOS app, an Android debug APK, and unsigned Electron Windows portable/macOS DMG packages. Successful jobs upload artifacts retained for 14 days. Apple simulator artifacts cannot install on physical iPhones or Apple TVs. Android uses a debug signing identity; macOS/Windows distributions are not release signed or notarized. The workflow does not publish a GitHub release, send anything to an app store, or require signing secrets. GitHub-hosted runner usage may consume your account's Actions allowance.
 
-The workflow has only `contents: read` permission, is manual-only, and pins action dependencies to verified commit SHAs. It installs build tools and dependencies when you run it. The template was statically parsed but has **not been executed**; a saved workflow is not evidence of a passing native build. Once a lockfile is generated for the Electron package, commit it so the job uses `npm ci`.
+The workflow has only `contents: read` permission, is manual-only, and pins action dependencies to verified commit SHAs. It installs build tools and dependencies when you run it. The template was statically parsed. An active copy of the workflow ran in GitHub Actions; actual job results are recorded above. A build artifact does not establish that its device interactions were tested. Once a lockfile is generated for the Electron package, commit it so the job uses `npm ci`.

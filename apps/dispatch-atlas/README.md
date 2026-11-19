@@ -2,7 +2,7 @@
 
 Dispatch Atlas is an independent scanner and incident workspace reconstructed from the supplied Squawster screenshots, sampled screen recording, and public product information. It follows the observed navy-and-gold visual style and scanner interactions, with added dispatch and firehouse displays. It uses its own identity and implementation; Squawster's logo, proprietary code, private APIs, and backend were not copied.
 
-This delivery includes runnable browser editions, a local incident service, and **uncompiled native source projects**. It is not an exact feature-parity claim or a signed, device-tested release for every platform. Bundled incidents, addresses, transcripts, and risk examples are explicitly fictional training fixtures. Named channel entries are unconnected configuration placeholders.
+This delivery includes runnable browser editions, a local incident service, native source projects, and **successful CI builds for Android, iOS Simulator, tvOS Simulator, macOS, and Windows**. It is not an exact feature-parity claim or a signed, device-tested release for every platform. Bundled incidents, addresses, transcripts, and risk examples are explicitly fictional training fixtures. Named channel entries are unconnected configuration placeholders.
 
 ## Quick start
 
@@ -24,7 +24,7 @@ npm run build
 npm start
 ```
 
-The browser app and local service have no package dependencies to install. `npm run build` generates both HTML files and both folders. Native shells have their own build prerequisites and dependencies. `npm test` currently runs **39 passing core, application-state, server, and map tests**. Browser UI and native-device acceptance remain separate checks; see [delivery status](docs/DELIVERY_STATUS.md).
+The browser app and local service have no package dependencies to install. `npm run build` generates both HTML files and both folders. Native shells have their own build prerequisites and dependencies. `npm test` runs **39 passing core, application-state, server, and map tests**. CI also passed **11 real Chromium browser flows**. Native compilation passed as listed below; physical-device installation and runtime acceptance remain untested. See [delivery status](docs/DELIVERY_STATUS.md).
 
 ## Use the workspace
 
@@ -41,15 +41,17 @@ The browser data service uses the shared `{incidents, feeds, calls}` contract. A
 
 | Platform | Included implementation | Verification / remaining requirement |
 | --- | --- | --- |
-| Web online | Responsive browser interface, direct audio configuration, incident polling, map links and optional tiles | Core/server tested; UI/device acceptance not claimed here. |
-| Web offline | Standalone HTML and folder editions, local records/preferences, local recording storage, GeoJSON display | No internet feeds, server polling, or downloaded satellite/street imagery. |
-| iOS / iPadOS | Local-asset WKWebView source, iOS/iPadOS 17+ target | Xcode build, signing, simulator/device tests required; foreground audio only. |
-| tvOS | Native SwiftUI Station/Dispatch source, remote controls, MapKit layers, HTTPS polling/cache, supplied POIs/parcels, optional foreground stream | tvOS 17+; uncompiled; no web view; no offline imagery or automated station hardware control. |
-| macOS | WKWebView source for macOS 14+, plus Electron source option | Build and signing/notarization required; OS integration unverified. |
-| Windows | Sandboxed Electron source and portable-build command | Windows build, installer verification, signing, and device tests required. |
-| Android | Kotlin WebView source with AndroidX local asset loader, Android 8+ target | Android SDK/Gradle build and signing required; no native background audio, push, or Android TV target. |
+| Web online | Responsive browser interface, direct audio configuration, incident polling, map links and optional tiles | 39 Node tests and 11 real Chromium flows passed in CI; physical-device coverage remains open. |
+| Web offline | Standalone HTML and folder editions, local records/preferences, local recording storage, GeoJSON display | Browser flows tested in CI; no internet feeds, server polling, or downloaded street/satellite imagery. |
+| iOS / iPadOS | Local-asset WKWebView, iOS/iPadOS 17+ target | iOS Simulator build passed; simulator runtime, device signing/install, and device tests remain; foreground audio only. |
+| tvOS | Native SwiftUI Station/Dispatch, remote controls, MapKit layers, HTTPS polling/cache, supplied POIs/parcels | tvOS Simulator build passed; remote/TV runtime and device signing/install remain; no offline imagery or automated station hardware. |
+| macOS | WKWebView app for macOS 14+, plus Electron option | Unsigned native app and unsigned Electron DMG builds passed; installation/runtime and signing/notarization remain. |
+| Windows | Sandboxed Electron source and unsigned portable executable | CI packaging and artifact upload passed; installation/runtime and release signing remain unverified. |
+| Android | Kotlin WebView/AndroidX local asset loader, Android 8+ | Debug APK build passed; device installation/runtime and release signing remain; no native background audio, push, or Android TV target. |
 
-See [platforms/README.md](platforms/README.md) for exact build commands, minimum OS versions, platform limitations, and network-origin requirements. The web build is not evidence that the native apps compiled or ran.
+Build evidence is in [GitHub Actions run 44635479873](https://github.com/CRYPTOJEFFE/JeffeRescueMap-AI/actions/runs/44635479873), commit `4d2868fc5c5c55aec07b7c787df94d663c52829b`. Download the available artifacts from that run while signed in to GitHub. They expire **December 3, 2026**; rerun the repository's build workflow to regenerate them.
+
+For Android, extract the Android artifact and install its debug APK on a test device. For macOS, extract the macOS artifact and open the unsigned DMG; production distribution still requires signing/notarization. iOS/tvOS artifacts target simulators and cannot be installed directly on physical devices; use Xcode and your signing team for device builds. For Windows, extract the portable artifact and run its unsigned executable on a test computer; no installation/runtime result is claimed. See [platforms/README.md](platforms/README.md) for rebuild commands and platform restrictions. A successful build is not an app-launch or device-runtime test.
 
 ## Maps and data connections
 
@@ -67,11 +69,11 @@ Primary references:
 
 The REA workflow was consulted through [CRYPTOJEFFE/rea](https://github.com/CRYPTOJEFFE/rea) at revision `71cc6b6f8523647a9997137caf5c684142a73fff`. No REA engine, app binary analysis, private-source recovery, or authenticated Squawster backend inspection occurred. The reference recording was sampled; unseen transitions are not established. See [observed parity](docs/OBSERVED_PARITY.md) and [evidence metadata](docs/evidence.json).
 
-The [private web edition](https://dispatch-atlas-jeffe.jeffjoseph1129.chatgpt.site) was successfully deployed on 2026-11-19. Cloud-browser inspection reached the OpenAI sign-in page; interactive rendering remains unverified. The source is isolated under `apps/dispatch-atlas` on a feature branch of `CRYPTOJEFFE/JeffeRescueMap-AI`.
+The [private web edition](https://dispatch-atlas-jeffe.jeffjoseph1129.chatgpt.site) was successfully deployed on 2026-11-19. Cloud-browser inspection reached the OpenAI sign-in page. Separately, the source passed 11 real Chromium flows in GitHub CI. The desktop incident, desktop station, and mobile category screenshots were visually reviewed and fit their viewports; the mobile suite also checked horizontal overflow. These checks do not establish authenticated rendering of the deployed preview. The source is isolated under `apps/dispatch-atlas` on a feature branch of `CRYPTOJEFFE/JeffeRescueMap-AI`.
 
 ## Next connections required
 
 - Authorized radio feed/archive URLs or a supported provider integration, plus a gateway for private credentials.
 - An authenticated HTTPS incident endpoint for phones, Apple TV, and shared station displays; authoritative parcel, cross-street, POI, and preplan data for the intended coverage area.
-- Apple and Android build/signing environments and target devices; Windows/macOS packaging and signing environments.
+- Physical-device installation/runtime checks and release signing for Apple, Android, and desktop builds.
 - Separate implementation and testing for background push, cloud synchronization, native background audio, speech transcription, and operational station alert hardware.

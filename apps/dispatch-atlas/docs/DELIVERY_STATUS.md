@@ -34,29 +34,29 @@ Status recorded 2026-11-19. This document distinguishes implemented source, exec
 
 | Platform | What is delivered | What has not been verified |
 | --- | --- | --- |
-| Browser | Online/offline single HTML and folder build outputs; responsive interface | Browser UI acceptance and full device coverage are not claimed by this status snapshot. |
-| iOS/iPadOS 17+ | WKWebView local-asset project | Swift compilation, simulator/device run, signing, background playback, lock-screen integration, push, and Blob export behavior. |
-| tvOS 17+ | Native SwiftUI station/dispatch project; focus controls; MapKit; HTTPS polling/cache; parcel import; optional foreground AVPlayer | Compilation, remote/TV tests, signing, reliable background delivery, offline map imagery, and station hardware integration. |
-| macOS 14+ | WKWebView project; Electron alternative | Native builds, physical OS tests, signing/notarization and release packaging. |
-| Windows | Sandboxed Electron project and portable-build recipe | Compilation/packaging on Windows, signing, installer execution and native permissions. |
-| Android 8+ | Kotlin WebView/AndroidX asset loader project | Gradle/SDK build, device execution, signing, background audio, native push, geolocation/Blob-download bridging; Android TV target absent. |
+| Browser | Online/offline single HTML and folder builds; 11 real Chromium flows passed in CI | Authenticated deployed-preview rendering and full physical-device/browser coverage. |
+| iOS/iPadOS 17+ | WKWebView project; iOS Simulator build passed | Simulator runtime, device installation, distribution signing, background playback, lock-screen integration, push, and device export behavior. |
+| tvOS 17+ | Native SwiftUI station/dispatch; tvOS Simulator build passed | Simulator/TV runtime, remote behavior, device signing/install, reliable background delivery, offline imagery, station hardware. |
+| macOS 14+ | Unsigned native WKWebView app and unsigned Electron DMG built successfully | Installation/runtime, physical OS tests, signing/notarization. |
+| Windows | Sandboxed Electron project; unsigned portable executable packaging and artifact upload passed | Release signing, executable launch, installation/runtime and native permissions. |
+| Android 8+ | Kotlin WebView/AndroidX asset loader; debug APK built successfully | Device install/runtime, release signing, background audio, native push, geolocation/Blob-download bridging; Android TV target absent. |
 
-Native project instructions and precise limitations are in [platforms/README.md](../platforms/README.md).
+Native implementation details and rebuild commands are in [platforms/README.md](../platforms/README.md). Successful compilation does not establish simulator execution or physical-device behavior.
 
 ## Validation evidence
 
 | Check | Status |
 | --- | --- |
-| Core data validation/filtering tests | 17 passed on Node.js in this workspace. |
-| Local service integration/security/persistence tests | 9 passed on Node.js in this workspace. |
-| Application-state integration | 7 passed with a DOM double; not a rendering test. |
-| Map projection and tile-origin policy | 6 passed. |
-| `npm test` aggregate | 39 tests passed at this status snapshot. |
-| Desktop shell JavaScript syntax | Parsed successfully; Electron runtime was not installed or executed. |
-| Native asset-copy script | Python compilation checked. |
-| Apple YAML / Android XML | Structural parsing only. |
-| Browser UI smoke suite | Separate script supplied; no passing UI result is asserted here. |
-| Native apps, simulators, installers | Not compiled or executed here. |
+| Core, application-state, server, and map tests | 39 Node tests passed in CI. Application-state doubles remain distinct from rendering tests. |
+| Browser UI smoke suite | 11 real Chromium browser flows passed in GitHub CI. |
+| Android | Debug APK compilation/package passed in CI. |
+| Apple native targets | iOS Simulator, tvOS Simulator, and unsigned native macOS builds passed in CI. |
+| Electron macOS | Unsigned DMG packaging passed in CI. |
+| Electron Windows | Unsigned portable executable packaging and artifact upload passed in CI. |
+| Screenshots | Reviewed `desktop-incidents.png`, `desktop-station.png`, and `mobile-categories.png` from CI artifact `14584830394`; layouts fit their viewports. The mobile browser suite also asserted no horizontal overflow. |
+| Physical devices | No installation, app launch, or native-runtime test completed. |
+
+Evidence: [GitHub Actions run 44635479873](https://github.com/CRYPTOJEFFE/JeffeRescueMap-AI/actions/runs/44635479873), source head `4d2868fc5c5c55aec07b7c787df94d663c52829b`; all jobs completed successfully. The earlier local Chromium attempt was blocked by the workspace socket policy. That local limitation is separate from the successful real-browser execution in GitHub CI.
 
 Tests do not establish provider availability, accuracy of third-party incident reports, or notification delivery reliability. Training fixtures are labeled throughout and are not evidence of real incidents.
 
@@ -64,13 +64,19 @@ Tests do not establish provider availability, accuracy of third-party incident r
 
 `npm run build` generates `dist/Dispatch_Atlas_Online.html`, `dist/Dispatch_Atlas_Offline.html`, `dist/online/`, and `dist/offline/`. `npm start` serves `web/` on `127.0.0.1:8787`. The native asset-copy step is separate; see the platform guide.
 
-The [private web edition](https://dispatch-atlas-jeffe.jeffjoseph1129.chatgpt.site) deployment succeeded on 2026-11-19 (source commit `a0601ea0af0fa3412ba8e5f02e1d07e4b6a32e47`). Cloud-browser inspection reached the OpenAI sign-in page; no successful visual inspection is claimed. Local Chromium testing was blocked by the host socket policy. Source is isolated on `feat/dispatch-atlas-2026-11-19` under `apps/dispatch-atlas` in `CRYPTOJEFFE/JeffeRescueMap-AI`.
+The [private web edition](https://dispatch-atlas-jeffe.jeffjoseph1129.chatgpt.site) deployment succeeded on 2026-11-19 (source commit `a0601ea0af0fa3412ba8e5f02e1d07e4b6a32e47`). Cloud-browser inspection reached the OpenAI sign-in page, so authenticated visual inspection of the deployed site remains unverified. The source subsequently passed 11 real Chromium flows in GitHub CI. Source is isolated on `feat/dispatch-atlas-2026-11-19` under `apps/dispatch-atlas` in `CRYPTOJEFFE/JeffeRescueMap-AI`.
+
+## Download and install the CI artifacts
+
+Open the [verified build run](https://github.com/CRYPTOJEFFE/JeffeRescueMap-AI/actions/runs/44635479873) while signed in to GitHub and download its available artifacts. Extract the Android artifact to get the debug APK for a test device; extract the macOS artifact to get the unsigned DMG. Physical-device installation remains a next step. iOS/tvOS outputs are simulator builds, not signed device-installable IPA files; build/sign device targets with Xcode. For Windows, extract the portable artifact and run its unsigned executable on a test computer; physical runtime remains untested.
+
+Artifacts expire **December 3, 2026**. Rerun the repository's build workflow to regenerate them; source and build instructions remain in the repository. Do not treat an unsigned/test package as an App Store or production-signed release.
 
 ## Next deployment requirements
 
 1. Connect authorized audio/archive sources and an authenticated HTTPS JSON gateway. Keep private credentials server-side; do not substitute a subscription for undocumented API access.
 2. Supply authoritative local GIS/preplan records, parcel geometry, cross streets, and source-attributed exposure data. Configure a public Mapbox token if satellite imagery is wanted.
-3. Build and run Apple targets on a Mac with Xcode/XcodeGen and signing access; Android with the SDK/JDK/Gradle; Electron on Windows/macOS. Complete target-device acceptance for playback, storage/import/export, remote focus, accessibility, and network interruption.
+3. Install and run the completed builds on target devices. Use Apple signing access for physical iOS/tvOS builds and release signing/notarization for distribution. Complete acceptance for playback, storage/import/export, remote focus, accessibility, and network interruption.
 4. Implement and validate background push, cloud accounts/synchronization, native background media, ASR, and station hardware integration as separate capabilities before claiming those features.
 
 Mapping references are linked in [README.md](../README.md). Public OpenStreetMap tiles are for permitted interactive online use, not bulk/offline downloads. Offline parcels are user-provided WGS84 GeoJSON, not a claim of authoritative land boundaries.
