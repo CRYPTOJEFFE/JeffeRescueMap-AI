@@ -1,0 +1,63 @@
+name: Dispatch Atlas Intel and Apple Silicon Mac builds
+on:
+  workflow_dispatch:
+  push:
+    branches: [feat/dispatch-atlas-2026-11-19]
+    paths: [.github/workflows/dispatch-atlas-mac-universal.yml]
+permissions:
+  contents: read
+jobs:
+  mac-universal:
+    runs-on: macos-15
+    timeout-minutes: 25
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    defaults:
+      run:
+        shell: bash
+        working-directory: apps/dispatch-atlas
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: Copy web resources
+        run: python3 platforms/copy-assets.py
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate Xcode project
+        working-directory: apps/dispatch-atlas/platforms/apple
+        run: xcodegen generate
+      - name: Build universal native macOS app
+        working-directory: apps/dispatch-atlas/platforms/apple
+        run: >-
+          xcodebuild -project DispatchAtlas.xcodeproj -scheme DispatchAtlasMac
+          -configuration Release -destination 'generic/platform=macOS'
+          -derivedDataPath build-mac-universal ARCHS='arm64 x86_64' ONLY_ACTIVE_ARCH=NO
+          CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO build
+      - name: Verify native app architectures and archive
+        working-directory: apps/dispatch-atlas/platforms/apple
+        run: |
+          lipo -verify_arch arm64 x86_64 build-mac-universal/Build/Products/Release/DispatchAtlasMac.app/Contents/MacOS/DispatchAtlasMac
+          mkdir -p artifacts
+          ditto -c -k --sequesterRsrc --keepParent build-mac-universal/Build/Products/Release/DispatchAtlasMac.app artifacts/DispatchAtlas-Mac-Universal-Unsigned.zip
+      - name: Install Electron dependencies
+        working-directory: apps/dispatch-atlas/platforms/desktop
+        run: npm install
+      - name: Package universal Electron Mac app
+        working-directory: apps/dispatch-atlas/platforms/desktop
+        run: npm run build:mac -- --universal --publish never
+      - name: Verify Electron architectures
+        working-directory: apps/dispatch-atlas/platforms/desktop
+        run: lipo -verify_arch arm64 x86_64 'release/mac-universal/Dispatch Atlas.app/Contents/MacOS/Dispatch Atlas'
+      - name: Upload universal Mac packages
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: dispatch-atlas-Mac-universal-unsigned
+          path: |
+            apps/dispatch-atlas/platforms/apple/artifacts/DispatchAtlas-Mac-Universal-Unsigned.zip
+            apps/dispatch-atlas/platforms/desktop/release/*.dmg
+          retention-days: 14
+          if-no-files-found: error
