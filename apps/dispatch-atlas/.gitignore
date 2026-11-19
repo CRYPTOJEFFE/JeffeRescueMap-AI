@@ -1,0 +1,15 @@
+node_modules/
+server/data/
+.env
+*.log
+__pycache__/
+*.pyc
+platforms/desktop/release/
+platforms/desktop/web/
+platforms/apple/Resources/web/
+platforms/apple/*.xcodeproj/
+platforms/android/app/src/main/assets/web/
+platforms/android/.gradle/
+platforms/android/**/build/
+test-results/
+dist/
