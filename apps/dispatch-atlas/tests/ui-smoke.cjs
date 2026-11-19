@@ -33,6 +33,19 @@ const server = http.createServer((req,res)=>{const file=path.join(root,new URL(r
  await check('station selection, acknowledgement and cross streets',async()=>{await page.locator('#side-nav [data-nav="station"]').click();assert.match(await page.locator('.station-call').innerText(),/Cross streets/);await page.locator('[data-ack]').click();assert.match(await page.locator('[data-ack]').innerText(),/Acknowledged on this device/);await page.reload();assert.match(await page.locator('[data-ack]').innerText(),/Acknowledged on this device/)});
  await check('mobile layouts fit viewport and navigation remains available',async()=>{await page.setViewportSize({width:390,height:844});for(const view of ['incidents','favorites','listen','settings','notifications','station']){await page.goto(url+'/#'+view);await page.waitForFunction(()=>window.AtlasApp);const dims=await page.evaluate(()=>({w:innerWidth,scroll:document.documentElement.scrollWidth}));assert.ok(dims.scroll<=dims.w+1,`${view} overflows ${dims.scroll-dims.w}px`);if(view!=='station')assert.ok(await page.locator('#bottom-nav').isVisible());} });
  await check('all tested flows are free of uncaught JavaScript errors',async()=>{assert.deepEqual(errors,[])});
- console.log(JSON.stringify({results,errors},null,2));
+ // Passive visual artifacts use only a freshly reset synthetic training workspace.
+ const screenshotDir=path.resolve(__dirname,'../test-results');
+ fs.mkdirSync(screenshotDir,{recursive:true});
+ await page.setViewportSize({width:1440,height:1000});
+ await fresh();
+ await page.screenshot({path:path.join(screenshotDir,'desktop-incidents.png'),animations:'disabled'});
+ await page.locator('#side-nav [data-nav="station"]').click();
+ await page.screenshot({path:path.join(screenshotDir,'desktop-station.png'),animations:'disabled'});
+ await page.setViewportSize({width:390,height:844});
+ await fresh();
+ await page.screenshot({path:path.join(screenshotDir,'mobile-incidents.png'),animations:'disabled'});
+ await page.locator('[data-action="categories"]').click();
+ await page.screenshot({path:path.join(screenshotDir,'mobile-categories.png'),animations:'disabled'});
+ console.log(JSON.stringify({results,errors,screenshots:['desktop-incidents.png','desktop-station.png','mobile-incidents.png','mobile-categories.png']},null,2));
  await browser.close();server.close();process.exitCode=results.some(r=>!r.pass)?1:0;
 })().catch(e=>{console.error(e);server.close();process.exitCode=1});

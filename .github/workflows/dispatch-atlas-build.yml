@@ -83,6 +83,9 @@ jobs:
           distribution: temurin
           java-version: '17'
       - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3.2.2
+        with:
+          packages: platform-tools
+          log-accepted-android-sdk-licenses: false
       - uses: gradle/actions/setup-gradle@017a9effdb900e5b5b2fddfb590a105619dca3c3 # v4.4.2
         with:
           gradle-version: '8.9'
@@ -165,3 +168,13 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Browser flows
         run: CHROMIUM_EXECUTABLE=$(node -p "require('playwright').chromium.executablePath()") npm run test:ui
+      - name: Upload browser previews and web editions
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: dispatch-atlas-web-editions-and-previews
+          path: |
+            apps/dispatch-atlas/test-results/
+            apps/dispatch-atlas/dist/
+          retention-days: 14
+          if-no-files-found: error

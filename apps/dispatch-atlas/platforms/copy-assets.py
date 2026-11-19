@@ -13,4 +13,4 @@ for target in [root / "apple/Resources/web", root / "android/app/src/main/assets
             destination = target / item.relative_to(source)
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(item, destination)
-    print(f"Copied web assets → {target}")
+    print(f"Copied web assets -> {target}")
