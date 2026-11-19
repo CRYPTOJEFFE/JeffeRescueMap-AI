@@ -40,7 +40,7 @@ jobs:
       - name: Verify native app architectures and archive
         working-directory: apps/dispatch-atlas/platforms/apple
         run: |
-          lipo -verify_arch arm64 x86_64 build-mac-universal/Build/Products/Release/DispatchAtlasMac.app/Contents/MacOS/DispatchAtlasMac
+          lipo build-mac-universal/Build/Products/Release/DispatchAtlasMac.app/Contents/MacOS/DispatchAtlasMac -verify_arch arm64 x86_64
           mkdir -p artifacts
           ditto -c -k --sequesterRsrc --keepParent build-mac-universal/Build/Products/Release/DispatchAtlasMac.app artifacts/DispatchAtlas-Mac-Universal-Unsigned.zip
       - name: Install Electron dependencies
@@ -51,7 +51,7 @@ jobs:
         run: npm run build:mac -- --universal --publish never
       - name: Verify Electron architectures
         working-directory: apps/dispatch-atlas/platforms/desktop
-        run: lipo -verify_arch arm64 x86_64 'release/mac-universal/Dispatch Atlas.app/Contents/MacOS/Dispatch Atlas'
+        run: lipo 'release/mac-universal/Dispatch Atlas.app/Contents/MacOS/Dispatch Atlas' -verify_arch arm64 x86_64
       - name: Upload universal Mac packages
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
